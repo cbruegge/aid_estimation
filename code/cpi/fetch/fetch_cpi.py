@@ -3,12 +3,12 @@ from math import ceil
 
 # Set workspace variables
 data_directory_path = (
-	"/Users/Chris/Documents/Research/stanford/" + 
-	"ra_larry/CGE_MODEL/utility_functions/cpi/data/cpi_series/"
+	"~/workspace/aid_estimation/data/cpi_series/"
 	)
 
-item_list = ["SAF1","SAE"]
-region_list = ["0100", "X100"]
+item_list = ["SAA", "SAE", "SAF","SAG","SAH","SAM","SAR","SAS","SAT"]
+#region_list = ["0100", "A100", "X100" , "0200", "A200", "X200","0300","A300","X300","0400","A400","X400","D000"]
+region_list = ["0100", "0200","0300","0400","D000"]
 adjustment = "U"
 periodicity = "R"
 start_year = 1980

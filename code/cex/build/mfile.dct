@@ -1,0 +1,22 @@
+infix dictionary using "${local_directory}/data/${input_file}.raw" {
+	
+		NEWID 1-7
+		AGE 8-10
+		RELATION 11
+		EDUC 12-13 
+		RACE 14 
+		SEX 15 
+		WEEKSIN 16-17 
+		EMPLCONT 18 
+		INCOLL 19 
+		NONWORK 20 
+		MARITAL 21
+		EMPSTAT 22
+		EMPTYPE 23
+		HRSWKD 24-26
+		WKSWKD 27-28
+		OCCUP 29-30
+		INDUST 31-32
+		MEMBINC1-MEMBINC12 33-152
+		LMEMBINC1-LMEMBINC12 153-272
+}

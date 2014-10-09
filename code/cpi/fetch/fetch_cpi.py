@@ -3,7 +3,8 @@ from math import ceil
 
 # Set workspace variables
 data_directory_path = (
-	"~/workspace/aid_estimation/data/cpi_series/"
+	"/Users/Chris/Documents/Research/stanford/ra_larry/" + 
+	"CGE_MODEL/aid_estimation/data/cpi_series/"
 	)
 
 item_list = ["SAA", "SAE", "SAF","SAG","SAH","SAM","SAR","SAS","SAT"]
@@ -22,31 +23,34 @@ for region in region_list:
 			)
 	
 
-for series_id in series_list:
+for region in region_list:
+	for item in item_list:
 
-	temp_start_year = start_year
+		series_id = "CU"+adjustment+periodicity+region+item
 
-	# Clear Output Series Files
-	print "Pulling data for " + series_id
-	with open(data_directory_path + series_id + ".txt",'w') as f:
-		f.write("series_id, year, period, value, footnotes\n")
-
-	# Pull 10-years at a time
-	queries_left = ceil((end_year - temp_start_year + 1) / 10.0)
-	while (queries_left > 0):
-		temp_end_year = min(end_year,temp_start_year + 9)
-
-		print "\t... " + str(temp_start_year) + " to " + str(temp_end_year)
-
-		get_series(
-			[series_id],
-			temp_start_year,
-			temp_end_year,
-			data_directory_path
-		)
-
-		temp_start_year = temp_start_year + 10
+		temp_start_year = start_year
+	
+		# Clear Output Series Files
+		print "Pulling data for " + series_id
+		with open(data_directory_path + series_id + ".txt",'w') as f:
+			f.write("series_id, year, period," + item + "_price, footnotes\n")
+	
+		# Pull 10-years at a time
 		queries_left = ceil((end_year - temp_start_year + 1) / 10.0)
+		while (queries_left > 0):
+			temp_end_year = min(end_year,temp_start_year + 9)
+	
+			print "\t... " + str(temp_start_year) + " to " + str(temp_end_year)
+	
+			get_series(
+				[series_id],
+				temp_start_year,
+				temp_end_year,
+				data_directory_path
+			)
+	
+			temp_start_year = temp_start_year + 10
+			queries_left = ceil((end_year - temp_start_year + 1) / 10.0)
 
 
 

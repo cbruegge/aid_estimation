@@ -43,6 +43,12 @@ fi
 # Build Data
 if [ "$build_data" == "YES" ]; then
 
+rm -rf "${local_directory}/data/temp/"
+mkdir "${local_directory}/data/temp"
+
+rm -rf "${local_directory}/data/output/"
+mkdir "${local_directory}/data/output"
+
 for year in `seq $start_year $end_year`;
 do
         year=`expr $year % 100`

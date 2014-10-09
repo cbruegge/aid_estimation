@@ -1,6 +1,6 @@
 *************************************************
 *
-* ./cex/build/create_expenditure_categories.do
+* ./build/create_expenditure_categories.do
 *
 * Aggregates the BLS Data to N Expenditure 
 * 	categories and creates budget share varaibles

@@ -12,7 +12,8 @@
 
 # Choose Modules to Run
 pull_data="NO"
-build_data="YES"
+build_data="NO"
+run_analysis="NO"
 
 # Define Variables
 local_directory="/Users/chris.bruegge/workspace/aid_estimation"
@@ -22,21 +23,15 @@ end_year=2002
 
 # Pull Data 
 if [ "$pull_data" == "YES" ]; then
-
-rm -rf ${local_directory}/data/*
-
-for year in `seq $start_year $end_year`;
-do
-        year=`expr $year % 100`
-        if [ $year -lt 10 ]; then 
-                year="0${year}"
-        fi
-        # Download Data to local directory
-        echo "Pulling data for ${year}"        
-        curl -o ${local_directory}/data/mfile${year}.zip ${data_url}/mfile${year}.zip
-        curl -o ${local_directory}/data/ffile${year}.zip ${data_url}/ffile${year}.zip
-
-done 
+    # Pull CEX Data
+    rm -rf "${local_directory}/data/cex_series/"
+    mkdir "${local_directory}/data/cex_series/"
+    ${local_directory}/code/fetch/fetch_cex.sh ${start_year} ${end_year} ${local_directory}
+ 
+    rm -rf "${local_directory}/data/cpi_series/"
+    mkdir "${local_directory}/data/cpi_series/"
+    # Pull CPI Data -- Can I modify this so the variables are configured here?
+    python ${local_directory}/code/fetch/fetch_cpi.py
 fi
 
 
@@ -63,55 +58,63 @@ do
         for quarter in `seq 1 4`;
         do
 
-                # Build ffile
-                sed -e "s?\${input_file}?ffile${year}${quarter}?g" ${local_directory}/code/cex/build/ffile.dct > ${local_directory}/code/cex/build/ffile${year}${quarter}.dct 
-                sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/cex/build/ffile${year}${quarter}.dct 
+                # Create ffile stata Datasets
+                sed -e "s?\${input_file}?ffile${year}${quarter}?g" ${local_directory}/code/build/ffile.dct > ${local_directory}/code/build/ffile${year}${quarter}.dct 
+                sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/build/ffile${year}${quarter}.dct 
 
-                sed -e "s?\${input_file}?ffile${year}${quarter}?g" ${local_directory}/code/cex/build/infix_file.do > ${local_directory}/code/cex/build/infix_file_temp.do 
-                sed -ie "s?\${output_file}?ffile${year}${quarter}?g" ${local_directory}/code/cex/build/infix_file_temp.do 
-                sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/cex/build/infix_file_temp.do 
+                sed -e "s?\${input_file}?ffile${year}${quarter}?g" ${local_directory}/code/build/infix_file.do > ${local_directory}/code/build/infix_file_temp.do 
+                sed -ie "s?\${output_file}?ffile${year}${quarter}?g" ${local_directory}/code/build/infix_file_temp.do 
+                sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/build/infix_file_temp.do 
 
                 mv "${local_directory}/data/ffile${year}${quarter}" "${local_directory}/data/ffile${year}${quarter}.raw"
 
-                statase -b do ${local_directory}/code/cex/build/infix_file_temp.do 
+                statase -b do ${local_directory}/code/build/infix_file_temp.do 
 
-                rm ${local_directory}/code/cex/build/ffile${year}${quarter}.dct* 
-                rm ${local_directory}/code/cex/build/infix_file_temp.do*
+                rm ${local_directory}/code/build/ffile${year}${quarter}.dct* 
+                rm ${local_directory}/code/build/infix_file_temp.do*
                 rm ${local_directory}/code/infix_file_temp.log*                
                 rm ${local_directory}/data/ffile${year}${quarter}.raw
 
 
-                # Build mfile
-                sed -e "s?\${input_file}?mfile${year}${quarter}?g" ${local_directory}/code/cex/build/mfile.dct > ${local_directory}/code/cex/build/mfile${year}${quarter}.dct 
-                sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/cex/build/mfile${year}${quarter}.dct 
+                # Create mfile stata datasets
+                sed -e "s?\${input_file}?mfile${year}${quarter}?g" ${local_directory}/code/build/mfile.dct > ${local_directory}/code/build/mfile${year}${quarter}.dct 
+                sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/build/mfile${year}${quarter}.dct 
 
-                sed -e "s?\${input_file}?mfile${year}${quarter}?g" ${local_directory}/code/cex/build/infix_file.do > ${local_directory}/code/cex/build/infix_file_temp.do 
-                sed -ie "s?\${output_file}?mfile${year}${quarter}?g" ${local_directory}/code/cex/build/infix_file_temp.do 
-                sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/cex/build/infix_file_temp.do 
+                sed -e "s?\${input_file}?mfile${year}${quarter}?g" ${local_directory}/code/build/infix_file.do > ${local_directory}/code/build/infix_file_temp.do 
+                sed -ie "s?\${output_file}?mfile${year}${quarter}?g" ${local_directory}/code/build/infix_file_temp.do 
+                sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/build/infix_file_temp.do 
 
                 mv "${local_directory}/data/mfile${year}${quarter}" "${local_directory}/data/mfile${year}${quarter}.raw"
 
-                statase do ${local_directory}/code/cex/build/infix_file_temp.do 
+                statase do ${local_directory}/code/build/infix_file_temp.do 
 
-                rm ${local_directory}/code/cex/build/mfile${year}${quarter}.dct* 
-                rm ${local_directory}/code/cex/build/infix_file_temp.do*
+                rm ${local_directory}/code/build/mfile${year}${quarter}.dct* 
+                rm ${local_directory}/code/build/infix_file_temp.do*
                 rm ${local_directory}/code/infix_file_temp.log*                
                 rm ${local_directory}/data/mfile${year}${quarter}.raw
        done
       
 done
 
-sed -e "s?\${start_year}?${start_year}?g" ${local_directory}/code/cex/build/build.do > ${local_directory}/code/cex/build/build_temp.do 
-sed -ie "s?\${end_year}?${end_year}?g" ${local_directory}/code/cex/build/build_temp.do 
+sed -e "s?\${start_year}?${start_year}?g" ${local_directory}/code/build/build.do > ${local_directory}/code/build/build_temp.do 
+sed -ie "s?\${end_year}?${end_year}?g" ${local_directory}/code/build/build_temp.do 
 sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/cex/build/build_temp.do 
 
 statase -b do ${local_directory}/code/cex/build/build_temp.do
 rm ${local_directory}/code/cex/build/build_temp.*
 rm ${local_directory}/code/build_temp.log
 
-
 fi
 
-
-
 # Run Estimation
+if [ "$run_analysis" == "YES" ]; then
+
+    # Set Variables
+    sed -e "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/analysis/analysis.do > ${local_directory}/code/analysis/analysis_temp.do 
+
+    # Run Analysis Program
+    statase -b do "${local_directory}/code/analysis/analysis_temp.do"
+
+    # Clean Up
+    rm ${local_directory}/code/analyis/analysis_temp.do*
+fi

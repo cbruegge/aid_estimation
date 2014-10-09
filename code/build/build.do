@@ -13,9 +13,12 @@
 local cpi_files : dir "${local_directory}/data/cpi_series" files "*.txt"
 
 * Create Temporary Stata Dataset
-foreach file of local cpi_files {
+foreach in_file of local cpi_files {
+
+	local item = subinstr("`in_file'",".txt","",1)
+
 	* Import Data
-	insheet using "${local_directory}/data/cpi_series/`file'.txt"
+	insheet using "${local_directory}/data/cpi_series/`item'.txt", clear
 
 	* Collapse to quarter
 	gen quarter = .
@@ -24,14 +27,15 @@ foreach file of local cpi_files {
 	replace quarter = 3 if period == "M07" | period == "M08" | period == "M09"
 	replace quarter = 4 if period == "M10" | period == "M11" | period == "M12"
 
-	collapse (first) series_id (mean) *_price, by(year quarter)
+	collapse (first) series_id (mean) *_price, by(year quarter area_code)
 
-	replace *_price = *_price / 100
+	foreach price_var of varlist *_price {
+		replace `price_var' = `price_var' / 100
+	}
 
 	* Define Merge Variables
-	urban = 1 + regexm(area_code,"D") // 1 - urban; 2 - rural 
+	gen urban = 1 + regexm(area_code,"D") // 1 - urban; 2 - rural 
 
-	area_code = substr(`file',5,4)
 	gen region = .
 	replace region = 1 if area_code == "0100"
 	replace region = 2 if area_code == "0200"
@@ -39,9 +43,9 @@ foreach file of local cpi_files {
 	replace region = 4 if area_code == "0400"
 	replace region = 5 if regexm(area_code,"D")
 
-	merge_var = region * 1000000 + urban * 100000 + year*10 + quarter
+	gen merge_var = region * 1000000 + urban * 100000 + year*10 + quarter
 
-	save "${local_directory}/data/temp/`file'.dta"
+	save "${local_directory}/data/temp/`item'.dta"
 
 }
 
@@ -63,7 +67,7 @@ forvalues ii = ${start_year} / ${end_year} {
 	}
 }
 save "${local_directory}/data/temp/mfile.dta"
-
+*/ 
 * Create the Family Record File
 clear
 forvalues ii = ${start_year} / ${end_year} {
@@ -73,8 +77,6 @@ forvalues ii = ${start_year} / ${end_year} {
 	}
 
 	forvalues quarter = 1/4 {
-		disp "`year'`quarter'"
-
 		if `quarter' == 2 {
 			append using "${local_directory}/data/temp/ffile`year'`quarter'.dta" 
 		}
@@ -82,14 +84,19 @@ forvalues ii = ${start_year} / ${end_year} {
 }
 
 * Create N Expenditure Categories from the BLS Expenditure Data
-include "${local_directory}/code/cex/build/create_expenditure_categories.do"
+include "${local_directory}/code/build/create_expenditure_categories.do"
 
 * Merge Member and Family Records with the NEWID variable
 merge m:m NEWID using "${local_directory}/data/temp/mfile.dta", gen(merge_mfile)
-tab _merge_mfile
+tab merge_mfile
 
 * Create Variable to Merge with Price Indices
 replace REGION = 5 if REGION == .
+gen year = substr(from_file,6,2)
+gen quarter = substr(from_file,8,1)
+destring year quarter, replace
+replace year = 1900 + year if year >= 50
+replace year = 2000 + year if year < 50
 gen merge_var = REGION * 1000000 + BLSURBN * 100000 + year * 10 + quarter
 
 *************************************************
@@ -97,35 +104,36 @@ gen merge_var = REGION * 1000000 + BLSURBN * 100000 + year * 10 + quarter
 *************************************************
 
 * Merge Price Data for Each Good
-local files : dir "${local_directory}/data/cpi_series" files "*.txt"
-for file of local files {
-	merge m:1 merge_var using "${local_directory}/temp/`file'.dta", gen(merge_`file')
+local cpi_files : dir "${local_directory}/data/cpi_series" files "*.txt"
+foreach in_file of local cpi_files {
+	local series_id = subinstr("`in_file'",".txt","",1)
+	merge m:1 merge_var using "${local_directory}/data/temp/`series_id'.dta", gen(merge_`series_id')
 }
 
 * Create Real Expenditures
-include "${local_directory}/build/create_real_expenditure_categories.do"
+include "${local_directory}/code/build/create_real_expenditure_categories.do"
 
 * Create Weighted Price Indices
-foreach category in "food gas_util trans housing outside_good" {
-	price_`category' = `category' / real_`category' 
+foreach category in "food" "gas_util" "trans" "housing" "outside_good" {
+	gen price_`category' = `category' / real_`category' 
 	gen lprice_`category' = log(price_`category')
 }
 
 gen INC = ( ///
-		  EXP(1) ///
-		+ EXP(2) ///
-		+ EXP(3) ///
-		+ EXP(4) ///
-		+ EXP(5) ///
-		+ EXP(6) ///
-		+ EXP(7) ///
-		+ EXP(8) ///
-		+ EXP(9) ///
-		+ EXP(10) ///
-		+ EXP(11) ///
-		+ EXP(12) ///
-		+ EXP(13) ///
-		+ EXP(14) 
+		  EXP1 ///
+		+ EXP2 ///
+		+ EXP3 ///
+		+ EXP4 ///
+		+ EXP5 ///
+		+ EXP6 ///
+		+ EXP7 ///
+		+ EXP8 ///
+		+ EXP9 ///
+		+ EXP10 ///
+		+ EXP11 ///
+		+ EXP12 ///
+		+ EXP13 ///
+		+ EXP14 ///
 	)
 
 keep lprice_* lexp share_* BLSURBN CUTENUR GOVHOUS PUBHOUS INC

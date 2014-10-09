@@ -3,39 +3,30 @@ from math import ceil
 
 # Set workspace variables
 data_directory_path = (
-	"/Users/Chris/Documents/Research/stanford/ra_larry/" + 
-	"CGE_MODEL/aid_estimation/data/cpi_series/"
+	"/Users/chris.bruegge/workspace/aid_estimation/data/cpi_series/"
 	)
 
-item_list = ["SAA", "SAE", "SAF","SAG","SAH","SAM","SAR","SAS","SAT"]
+item_list = ["SAF", "SAH2", "SAT","SAH1","SAH3","SAA","SAG","SAM","SAR","SAE"]
 #region_list = ["0100", "A100", "X100" , "0200", "A200", "X200","0300","A300","X300","0400","A400","X400","D000"]
 region_list = ["0100", "0200","0300","0400","D000"]
 adjustment = "U"
 periodicity = "R"
 start_year = 1980
-end_year = 2014
+end_year = 2002	
 
-series_list = []
-for region in region_list:
-	for item in item_list:
-		series_list.append(
-			"CU"+adjustment+periodicity+region+item
-			)
-	
+for item in item_list:
 
-for region in region_list:
-	for item in item_list:
+	# Clear Output Series File
+	with open(data_directory_path + item + ".txt",'w') as f:
+		f.write("series_id, area_code, year, period," + item + "_price, footnotes\n")
+
+	for region in region_list:
 
 		series_id = "CU"+adjustment+periodicity+region+item
-
 		temp_start_year = start_year
 	
-		# Clear Output Series Files
-		print "Pulling data for " + series_id
-		with open(data_directory_path + series_id + ".txt",'w') as f:
-			f.write("series_id, year, period," + item + "_price, footnotes\n")
-	
 		# Pull 10-years at a time
+		print "Pulling data for " + series_id
 		queries_left = ceil((end_year - temp_start_year + 1) / 10.0)
 		while (queries_left > 0):
 			temp_end_year = min(end_year,temp_start_year + 9)
@@ -43,15 +34,15 @@ for region in region_list:
 			print "\t... " + str(temp_start_year) + " to " + str(temp_end_year)
 	
 			get_series(
-				[series_id],
+				adjustment,
+				periodicity,
+				region,
+				item,
 				temp_start_year,
 				temp_end_year,
 				data_directory_path
 			)
 	
-			temp_start_year = temp_start_year + 10
+			temp_start_year = temp_start_year + 10 
 			queries_left = ceil((end_year - temp_start_year + 1) / 10.0)
-
-
-
 

@@ -24,7 +24,8 @@ import json
 #
 ##############################################################
 
-def get_series(series_list,start_year,end_year,data_directory_path):
+def get_series(adjustment,periodicity,region,item,start_year,end_year,data_directory_path):
+	series_list = ["CU"+adjustment+periodicity+region+item]
 	headers = {'Content-type': 'application/json'} 
 	data = json.dumps(
 		{"seriesid": series_list,
@@ -53,9 +54,10 @@ def get_series(series_list,start_year,end_year,data_directory_path):
         			footnotes = footnotes + footnote['text'] + ','
 
         	if 'M01' <= period <= 'M12':
-        		with open(data_directory_path + series_id + ".txt",'a') as f:
+        		with open(data_directory_path + item + ".txt",'a') as f:
 					f.write(
 						series_id + "," + 
+						region + "," +
 						year + "," +
 						period + "," +
 						value + "," + '"' +

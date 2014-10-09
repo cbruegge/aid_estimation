@@ -1,4 +1,4 @@
-infix dictionary using "${local_directory}/data/${input_file}.raw" {
+infix dictionary using "${local_directory}/data/temp/${input_file}.raw" {
 	
 		NEWID 1-7
 		BLSURBN 8

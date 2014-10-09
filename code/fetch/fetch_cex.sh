@@ -17,8 +17,7 @@
 start_year=${1}
 end_year=${2}
 local_directory=${3}
-
-rm -rf ${local_directory}/data/*
+data_url=${4}
 
 for year in `seq $start_year $end_year`;
 do

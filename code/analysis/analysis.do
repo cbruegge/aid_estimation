@@ -16,4 +16,4 @@ nlsur aids @ share_food share_gas_util share_trans share_housing ///
 		g11 g12 g13 g14 g22 g23 g24 g33 g34 g44) neq(4) ifgnls
 
 
-
+do "${local_directory}/code/analysis/coeffs_to_elasticities.do"

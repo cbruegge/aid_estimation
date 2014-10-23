@@ -4,8 +4,10 @@ program nlsuraids
   syntax varlist(min=8) [if], at(name)
   tokenize `varlist'
 
+  * Change lenght_varlist - 2 later ... right now I'm using 2 demographic attributes
   local length_varlist : word count `varlist' 
-  local n_goods = `length_varlist' / 2
+
+  local n_goods = (`length_varlist'-${num_demographic_vars}) / 2
   local n_eqns = `n_goods' - 1
 
   local alpha0 = 5
@@ -31,7 +33,14 @@ program nlsuraids
     local lnp`arg' = "``ii''"
   }
 
-  local lnm = "``length_varlist''"
+  local lnm_index = `n_goods' + `n_eqns' + 1
+  local lnm = "``lnm_index''"
+
+  * Demographic Variables are the last elements of varlist
+  forvalues arg = 1/${num_demographic_vars} {
+    local dem_var`arg'_index = `lnm_index' + `arg'
+    local dem_var`arg' = "`dem_var`arg'_index'"
+  }
 
   forvalues ii = 1/`n_eqns' {
 
@@ -82,11 +91,25 @@ program nlsuraids
 
   }
 
+  * Demographic Variables are the last elements of varlist
+  forvalues arg = 1/${num_demographic_vars} {
+    local d`arg'_index = `g_index' + `arg'
+    tempname d`arg'
+    scalar `d`arg'' = `at'[1,`d`arg'_index']
+  }
+
   quietly {
     forvalues ii = 1/`n_eqns' {
-      replace `w`ii'' = `a`ii'' + `b`ii''*(`lnm' - `lnpindex') `if'
+      replace `w`ii'' = `a`ii'' + `b`ii''*(`lnm' - `lnpindex') + `d1'*`dem_var1' `if'
+      
+      * Price Coefficients
       forvalues jj = 1/`n_goods' {
         replace `w`ii'' = `w`ii'' + `g`ii'`jj''*`lnp`jj''
+      }
+
+      * Demographic Coefficients
+      forvalues kk = 1/${num_demographic_vars} {
+        replace `w`ii'' = `w`ii'' + `d`kk''*`dem_var`kk'' 
       }
     }
 	} 

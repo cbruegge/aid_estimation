@@ -113,6 +113,9 @@ foreach in_file of local cpi_files {
 * Create Real Expenditures
 include "${local_directory}/code/build/create_real_expenditure_categories.do"
 
+* Create Demographic Dummies
+include "${local_directory}/code/build/create_demographic_categories.do"
+
 * Create Weighted Price Indices
 foreach category in "food" "gas_util" "trans" "housing" "outside_good" {
 	gen price_`category' = `category' / real_`category' 
@@ -136,7 +139,7 @@ gen INC = ( ///
 		+ EXP14 ///
 	)
 
-keep lprice_* lexp share_* BLSURBN CUTENUR GOVHOUS PUBHOUS INC
+keep lprice_* lexp share_* CUTENUR* FAMSIZE AGE RACE* MALE MARITAL* EMPSTAT* INC
 
 save "${local_directory}/data/output/cleaned_data.dta", replace 
 

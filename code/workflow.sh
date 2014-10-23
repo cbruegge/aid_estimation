@@ -12,8 +12,8 @@
 
 # Choose Modules to Run
 pull_data="NO"
-build_data="NO"
-run_analysis="YES"
+build_data="YES"
+run_analysis="NO"
 
 # Define Variables
 local_directory="/Users/chris.bruegge/workspace/aid_estimation"

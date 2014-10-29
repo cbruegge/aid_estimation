@@ -27,10 +27,8 @@ gen gas_util = EXP38 /* Electricity */ ///
 gen trans = EXP52 /* New and Used Motor Vehicles */ ///
 			+ EXP53 /* Motor Vehicle Parts */ ///
 			+ EXP54 /* Motor Vehicle Repair */ ///
-			+ EXP56 /* Tolls */ ///
 			+ EXP57 /* Auto Insurance */ ///
 			+ EXP58 /* Mass Transit */ ///
-			+ EXP59 /* Taxi & Misc Travel */ ///
 			+ EXP60 /* Airline Fares */ 
 
 
@@ -65,6 +63,9 @@ gen outside_good = EXP29 /* Clothing and Shoes */ ///
 
 			/*+ EXP50 /* Business Services */ /// */
 			/*+ EXP51 /* Expense of Handilng Life Insurance */ /// */
+			/* 			+ EXP56 /* Tolls */ /// */ 
+			/* 			+ EXP59 /* Taxi & Misc Travel */ /// */ 
+
 
 * Create Budget Shares
 gen tot_expenditure = food + gas_util + trans + housing + outside_good

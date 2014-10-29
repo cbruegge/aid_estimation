@@ -40,6 +40,8 @@ def get_series(adjustment,periodicity,region,item,start_year,end_year,data_direc
 
 	json_data = json.loads(p.text) 
 
+	print json_data
+
 	for series in json_data['Results']['series']:
 	    series_id = series['seriesID']
     	

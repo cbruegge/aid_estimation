@@ -11,8 +11,8 @@
 #kinit cbruegge@stanford.edu
 
 # Choose Modules to Run
-pull_data="NO"
-build_data="YES"
+pull_data="YES"
+build_data="NO"
 run_analysis="NO"
 
 # Define Variables
@@ -28,8 +28,8 @@ if [ "$pull_data" == "YES" ]; then
     #mkdir "${local_directory}/data/cex_series/"
     #${local_directory}/code/fetch/fetch_cex.sh ${start_year} ${end_year} ${local_directory} ${data_url}
  
-    rm -rf "${local_directory}/data/cpi_series/"
-    mkdir "${local_directory}/data/cpi_series/"
+    #rm -rf "${local_directory}/data/cpi_series/"
+    #mkdir "${local_directory}/data/cpi_series/"
     # Pull CPI Data -- Can I modify this so the variables are configured here?
     python ${local_directory}/code/fetch/fetch_cpi.py
 fi

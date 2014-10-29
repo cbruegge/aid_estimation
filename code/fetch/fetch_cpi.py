@@ -6,8 +6,10 @@ data_directory_path = (
 	"/Users/chris.bruegge/workspace/aid_estimation/data/cpi_series/"
 	)
 
-item_list = ["SAF", "SAH2", "SAT","SAH1","SAH3","SAA","SAG","SAM","SAR","SAE"]
-#region_list = ["0100", "A100", "X100" , "0200", "A200", "X200","0300","A300","X300","0400","A400","X400","D000"]
+item_list = ["SAE"]
+#item_list = ["SAF1","SAF116", "SEGA", "SEHF01", "SEHF02", "SEHG", "SEHE01", "SETB", "SETA", "SETC", "SETD", "SETE","SETG", "SETG01", "SEHA", "SEHC", "SAH3", "SAA", "SAG", "SAM", "SAR", "SAE"]
+# Problematic series: SETG, SETG01, SEHA
+
 region_list = ["0100", "0200","0300","0400","D000"]
 adjustment = "U"
 periodicity = "R"

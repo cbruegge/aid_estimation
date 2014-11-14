@@ -90,6 +90,8 @@ include "${local_directory}/code/build/create_expenditure_categories.do"
 merge m:m NEWID using "${local_directory}/data/temp/mfile.dta", gen(merge_mfile)
 tab merge_mfile
 
+keep if RELATION == 1
+
 * Create Variable to Merge with Price Indices
 replace REGION = 5 if REGION == .
 gen year = substr(from_file,6,2)

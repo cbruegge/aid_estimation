@@ -11,9 +11,9 @@
 #kinit cbruegge@stanford.edu
 
 # Choose Modules to Run
-pull_data="YES"
-build_data="NO"
-run_analysis="NO"
+pull_data="NO"
+build_data="YES"
+run_analysis="YES"
 
 # Define Variables
 local_directory="/Users/chris.bruegge/workspace/aid_estimation"
@@ -98,8 +98,8 @@ sed -ie "s?\${end_year}?${end_year}?g" ${local_directory}/code/build/build_temp.
 sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/build/build_temp.do 
 
 statase -b do ${local_directory}/code/build/build_temp.do
-rm ${local_directory}/code/build/build_temp.*
-rm ${local_directory}/code/build_temp.log
+#rm ${local_directory}/code/build/build_temp.*
+#rm ${local_directory}/code/build_temp.log
 
 fi
 

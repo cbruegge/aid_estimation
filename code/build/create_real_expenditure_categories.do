@@ -9,66 +9,37 @@
 
 * Create 5 Expenditure Categories
 
-gen real_food = 1/saf1_price * ( ///
+gen real_food = 1/saf_price * ( ///
 			  EXP23 /* Food Off-Premise */ ///
 			+ EXP24 /* Food On-Premise */ ///
 			+ EXP25 /* Food Furnished Employees */ ///
-			) + ///
-			1/saf116_price * ( ///
-			  EXP27 /* Alcohol Off-Premise */ ///
+			+ EXP27 /* Alcohol Off-Premise */ ///
 			+ EXP28 /* Alcohol On-Premise */ ///
-			) + ///
-			1/sega_price * ( ///
-			  EXP26 /* Tobacco Products */ ///
+			+ EXP26 /* Tobacco Products */ ///
 			)
 
-gen real_gas_util = 1/sehf01_price * ( ///
-			  EXP38 /* Electricity */ ///
-			) + ///
-			 1/ sehf02_price * (
-			  EXP39 /* Heating Gas */ ///
-			) + ///
-			1/ sehg_price * ( /// 
-			  EXP40 /* Water */ ///
-			) + ///
-			1/sehe01_price * ( ///
-			 EXP41 /* Fuel Oil */ ///
-			) + ///
-			1/ setb_price * ( ///
-			 EXP55 /* Motor Vehicle Gas */ ///
-			)
-
-gen real_trans = 1/seta_price * ( ///
+gen real_trans = 1/sat * ( ///
 			  EXP52 /* New and Used Motor Vehicles */ ///
-			) + ///
-			1/ setc_price * ( ///
-			  EXP53 /* Motor Vehicle Parts */ ///
-			) + ///
-			1/setd_price * ( ///
-			  EXP54 /* Motor Vehicle Repair */ ///
-			) + ///
-			1/sete_price * ( ///
-			  EXP57 /* Auto Insurance */ ///
-			) + ///
-			1/ setg_price * ( 
-			  EXP58 /* Mass Transit */ ///
-			) + ///
-			1/ setg01_price * (
-			 EXP60 /* Airline Fares */ ///
+			+ EXP53 /* Motor Vehicle Parts */ ///
+			+ EXP54 /* Motor Vehicle Repair */ ///
+			+ EXP55 /* Motor Vehicle Gas */ ///			
+			+ EXP57 /* Auto Insurance */ ///
+			+ EXP58 /* Mass Transit */ ///
+			+ EXP60 /* Airline Fares */ ///
 			)
 
-gen real_housing = 1/seha_price * ( ///
+gen real_housing = 1/sah_price * ( ///
 			  EXP34 /* Rent -- Tenant-occupied non-farm */ ///
 			+ EXP35 /* Other Rent */ ///
-			) + ///
-			1/sehc_price * ( ///
-			  EXP75 /* Rental Equivalent of Owned Home */ ///
-			) + ///
-			1/sah3_price * ( ///
-			  EXP36 /* Durable HH Equipment */ ///
+			+ EXP36 /* Durable HH Equipment */ ///
 			+ EXP37 /* Non-durable HH Equipment */ ///
+			+ EXP38 /* Electricity */ ///
+			+ EXP39 /* Heating Gas */ ///
+			+ EXP40 /* Water */ ///
+			+ EXP41 /* Fuel Oil */ ///
 			+ EXP42 /* Telephone */ ///
 			+ EXP43 /* Domestic Service & Misc HH Operation */ ///
+			+ EXP75 /* Rental Equivalent of Owned Home */ ///
 			)
 
 

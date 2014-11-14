@@ -6,7 +6,7 @@ data_directory_path = (
 	"/Users/chris.bruegge/workspace/aid_estimation/data/cpi_series/"
 	)
 
-item_list = ["SAE"]
+item_list = ["SAH"]
 #item_list = ["SAF1","SAF116", "SEGA", "SEHF01", "SEHF02", "SEHG", "SEHE01", "SETB", "SETA", "SETC", "SETD", "SETE","SETG", "SETG01", "SEHA", "SEHC", "SAH3", "SAA", "SAG", "SAM", "SAR", "SAE"]
 # Problematic series: SETG, SETG01, SEHA
 

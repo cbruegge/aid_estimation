@@ -4,19 +4,19 @@
 *
 ******************************************************
 
-keep if share_food ~= . & share_gas_util ~= . & share_trans ~= . & share_housing ~= . & share_outside_good ~= . & lprice_food ~= . & lprice_gas_util ~= . & lprice_trans ~= . & lprice_housing ~= . & lprice_outside_good ~= . & INC ~= . & INC > 0
+keep if share_food ~= . & share_trans ~= . & share_housing ~= . & share_outside_good ~= . & lprice_food ~= . & lprice_trans ~= . & lprice_housing ~= . & lprice_outside_good ~= . & INC ~= . & INC > 0
 
 sample 1000, count
 
-// Create a matrix of Budget Shares
+* Create a matrix of Budget Shares
 mkmat share* in 1, matrix(W)
 mkmat lp* in 1, matrix(lnP)
 
 matrix coeffs = e(b)
 matrix vce_mat = e(V)
 
-matrix Beta = coeffs[1,1..18]
-matrix Sigma = vce_mat[1..18,1..18]
+matrix Beta = coeffs[1,1..12]
+matrix Sigma = vce_mat[1..12,1..12]
 
 mata: mata clear
 

@@ -16,17 +16,10 @@ gen food = EXP23 /* Food Off-Premise */ ///
 			+ EXP27 /* Alcohol Off-Premise */ ///
 			+ EXP28 /* Alcohol On-Premise */ 
 
-
-gen gas_util = EXP38 /* Electricity */ ///
-			+ EXP39 /* Heating Gas */ ///
-			+ EXP40 /* Water */ ///
-			+ EXP41 /* Fuel Oil */ ///
-			+ EXP55 /* Motor Vehicle Gas */ 
-
-
-gen trans = EXP52 /* New and Used Motor Vehicles */ ///
+gen trans =   EXP52 /* New and Used Motor Vehicles */ ///
 			+ EXP53 /* Motor Vehicle Parts */ ///
 			+ EXP54 /* Motor Vehicle Repair */ ///
+			+ EXP55 /* Motor Vehicle Gas */ ///
 			+ EXP57 /* Auto Insurance */ ///
 			+ EXP58 /* Mass Transit */ ///
 			+ EXP60 /* Airline Fares */ 
@@ -36,6 +29,10 @@ gen housing = EXP34 /* Rent -- Tenant-occupied non-farm */ ///
 			+ EXP35 /* Other Rent */ ///
 			+ EXP36 /* Durable HH Equipment */ ///
 			+ EXP37 /* Non-durable HH Equipment */ ///
+			+ EXP38 /* Electricity */ ///
+			+ EXP39 /* Heating Gas */ ///
+			+ EXP40 /* Water */ ///
+			+ EXP41 /* Fuel Oil */ ///
 			+ EXP42 /* Telephone */ ///
 			+ EXP43 /* Domestic Service & Misc HH Operation */ ///
 			+ EXP75 /* Rental Equivalent of Owned Home */ 
@@ -68,10 +65,9 @@ gen outside_good = EXP29 /* Clothing and Shoes */ ///
 
 
 * Create Budget Shares
-gen tot_expenditure = food + gas_util + trans + housing + outside_good
+gen tot_expenditure = food + trans + housing + outside_good
 gen lexp = log(tot_expenditure)
 gen share_food = food / tot_expenditure
-gen share_gas_util = gas_util / tot_expenditure
 gen share_trans = trans / tot_expenditure
 gen share_housing = housing / tot_expenditure
 gen share_outside_good = outside_good / tot_expenditure

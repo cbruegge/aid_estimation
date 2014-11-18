@@ -11,8 +11,8 @@
 #kinit cbruegge@stanford.edu
 
 # Choose Modules to Run
-pull_data="YES"
-build_data="NO"
+pull_data="NO"
+build_data="YES"
 run_analysis="NO"
 
 # Define Variables
@@ -84,7 +84,7 @@ do
 
                 mv "${local_directory}/data/temp/mfile${year}${quarter}" "${local_directory}/data/temp/mfile${year}${quarter}.raw"
 
-                statase do ${local_directory}/code/build/infix_file_temp.do 
+                statase -b do ${local_directory}/code/build/infix_file_temp.do 
 
                 rm ${local_directory}/code/build/mfile${year}${quarter}.dct* 
                 rm ${local_directory}/code/build/infix_file_temp.do*
@@ -98,8 +98,8 @@ sed -ie "s?\${end_year}?${end_year}?g" ${local_directory}/code/build/build_temp.
 sed -ie "s?\${local_directory}?${local_directory}?g" ${local_directory}/code/build/build_temp.do 
 
 statase -b do ${local_directory}/code/build/build_temp.do
-rm ${local_directory}/code/build/build_temp.*
-rm ${local_directory}/code/build_temp.log
+rm ${local_directory}/code/build/build_temp.do*
+#rm ${local_directory}/code/build_temp.log
 
 fi
 

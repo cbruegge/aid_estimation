@@ -4,19 +4,7 @@
 *
 ******************************************************
 
-keep if share_food ~= . & share_trans ~= . & share_housing ~= . & share_outside_good ~= . & lprice_food ~= . & lprice_trans ~= . & lprice_housing ~= . & lprice_outside_good ~= . & INC ~= . & INC > 0
-
-sample 1000, count
-
 * Create a matrix of Budget Shares
-mkmat share* in 1, matrix(W)
-mkmat lp* in 1, matrix(lnP)
-
-matrix coeffs = e(b)
-matrix vce_mat = e(V)
-
-matrix Beta = coeffs[1,1..12]
-matrix Sigma = vce_mat[1..12,1..12]
 
 mata: mata clear
 
@@ -186,40 +174,3 @@ function calculate_eta_ij_t(Beta,Sigma,W,lnP)
 }
 end
 
-mata:
-	Beta = st_matrix("Beta")
-	Sigma = st_matrix("Sigma")
-	alpha = get_alpha(Beta)
-	beta = get_beta(Beta)
-	gamma = get_gamma(Beta)
-	W = st_matrix("W")
-	lnP = st_matrix("lnP")
-	
-	calculate_eta(Beta,Sigma,W,lnP)
-	eta_ij_t=calculate_eta_ij_t(Beta,Sigma,W,lnP)
-	eta_ij_t
-	n_goods = (-3 + sqrt(9 + 4*(4 + 2*length(Beta))))/2
-	eta_t_readable = J(n_goods,n_goods,0)
-
-	// Spot Chekc a Few Elasticities -- eta 11
-	-1 + gamma[1,1]/W[1,1] - beta[1,1]*alpha[1,1]/W[1,1] - beta[1,1]/W[1,1]*(lnP*gamma[1..n_goods,1])
-
-	// Spot Chekc a Few Elasticities -- eta 13
-	gamma[1,3]/W[1,1] - beta[1,1]*alpha[3,1]/W[1,1] - beta[1,1]/W[1,1]*(lnP*gamma[1..n_goods,3])
-
-	// Spot Chekc a Few Elasticities -- eta 42
-	gamma[4,2]/W[1,4] - beta[4,1]*alpha[2,1]/W[1,4] - beta[4,1]/W[1,4]*(lnP*gamma[1..n_goods,2])
-
-	for (ii=1;ii<=n_goods;ii++)
-	{
-		for (jj=1;jj<=n_goods;jj++)
-		{
-			if (abs(eta_ij_t[ii,jj]) > 1.96)
-			{ 
-				eta_t_readable[ii,jj] = 1 
-			}
-		}
-	}
-	eta_t_readable
-
-end

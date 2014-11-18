@@ -19,12 +19,21 @@ use "${local_directory}/data/output/cleaned_data.dta"
 keep if INC ~= . & INC > 0 & FAMSIZE ~= .
 
 global num_demographic_vars = 3
+local n_eqns = 3
+
+local demographic_var_coeffs = ""
+local num_demographic_var_coeffs = ${num_demographic_vars} * `n_eqns'
+forvalues ii = 1/`num_demographic_var_coeffs' {
+		local demographic_var_coeffs = "`demographic_var_coeffs' d`ii'"
+	}
+
+
 nlsur aids @ share_food share_trans share_housing ///
 	lprice_food lprice_trans lprice_housing lprice_outside_good lexp ///
-	FAMSIZE INC RACE1, ///
+	RACE1 INC FAMSIZE, ///
 	parameters(a1 a2 a3 b1 b2 b3 ///
 		g11 g12 g13 g22 g23 g33 ///
-		d1 d2 d3) neq(3) ifgnls
+		`demographic_var_coeffs') neq(`n_eqns') ifgnls
 
 * Calculate Elasticities
 
@@ -59,15 +68,6 @@ mata:
 	n_goods = (-3 + sqrt(9 + 4*(4 + 2*length(Beta))))/2
 	eta_t_readable = J(n_goods,n_goods,0)
 
-	// Spot Chekc a Few Elasticities -- eta 11
-	-1 + gamma[1,1]/W[1,1] - beta[1,1]*alpha[1,1]/W[1,1] - beta[1,1]/W[1,1]*(lnP*gamma[1..n_goods,1])
-
-	// Spot Chekc a Few Elasticities -- eta 13
-	gamma[1,3]/W[1,1] - beta[1,1]*alpha[3,1]/W[1,1] - beta[1,1]/W[1,1]*(lnP*gamma[1..n_goods,3])
-
-	// Spot Chekc a Few Elasticities -- eta 42
-	gamma[4,2]/W[1,4] - beta[4,1]*alpha[2,1]/W[1,4] - beta[4,1]/W[1,4]*(lnP*gamma[1..n_goods,2])
-
 	for (ii=1;ii<=n_goods;ii++)
 	{
 		for (jj=1;jj<=n_goods;jj++)
@@ -81,7 +81,7 @@ mata:
 	eta_t_readable
 
 end
-
+/*
 local obs = _N
 
 forvalues ii = 1/`obs' {

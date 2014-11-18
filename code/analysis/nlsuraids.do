@@ -92,15 +92,17 @@ program nlsuraids
   }
 
   * Demographic Variables are the last elements of varlist
-  forvalues arg = 1/${num_demographic_vars} {
+  local num_demographic_coefficients = ${num_demographic_vars} * `n_eqns'
+  forvalues arg = 1/`num_demographic_coefficients' {
     local d`arg'_index = `g_index' + `arg'
     tempname d`arg'
     scalar `d`arg'' = `at'[1,`d`arg'_index']
   }
 
   quietly {
+    local d_index = 0
     forvalues ii = 1/`n_eqns' {
-      replace `w`ii'' = `a`ii'' + `b`ii''*(`lnm' - `lnpindex') + `d1'*`dem_var1' `if'
+      replace `w`ii'' = `a`ii'' + `b`ii''*(`lnm' - `lnpindex') `if'
       
       * Price Coefficients
       forvalues jj = 1/`n_goods' {
@@ -109,8 +111,11 @@ program nlsuraids
 
       * Demographic Coefficients
       forvalues kk = 1/${num_demographic_vars} {
-        replace `w`ii'' = `w`ii'' + `d`kk''*`dem_var`kk'' 
+          local d_index = `d_index' + 1
+          replace `w`ii'' = `w`ii'' + `d`d_index''*`dem_var`kk'' 
       }
+
+
     }
 	} 
 

@@ -32,6 +32,7 @@ nlsur aids @ share_food share_gas_util share_trans share_housing ///
 
 * For a Person with the Average Characteristics
 egen avg_share_food = mean(share_food)
+egen avg_share_gas_util = mean(share_gas_util)
 egen avg_share_trans = mean(share_trans)
 egen avg_share_housing = mean(share_housing)
 egen avg_share_outside_good = mean(share_outside_good)
@@ -42,8 +43,8 @@ mkmat lp* in 1, matrix(lnP)
 matrix coeffs = e(b)
 matrix vce_mat = e(V)
 
-matrix Beta = coeffs[1,1..12]
-matrix Sigma = vce_mat[1..12,1..12]
+matrix Beta = coeffs[1,1..18]
+matrix Sigma = vce_mat[1..18,1..18]
 
 
 mata:

@@ -9,30 +9,20 @@
 
 * Create 5 Expenditure Categories
 
-gen real_food = 1/saf1_price * ( ///
+gen real_food = 1/saf * ( ///
 			  EXP23 /* Food Off-Premise */ ///
 			+ EXP24 /* Food On-Premise */ ///
 			+ EXP25 /* Food Furnished Employees */ ///
-			) + ///
-			1/saf116_price * ( ///
-			  EXP27 /* Alcohol Off-Premise */ ///
+			+ EXP27 /* Alcohol Off-Premise */ ///
 			+ EXP28 /* Alcohol On-Premise */ ///
-			) + ///
-			1/sega_price * ( ///
-			  EXP26 /* Tobacco Products */ ///
+			+ EXP26 /* Tobacco Products */ ///
 			)
 
 gen real_gas_util = 1/sehf01_price * ( ///
 			  EXP38 /* Electricity */ ///
 			) + ///
-			 1/ sehf02_price * (
+			 1/ sehf02_price * ( ///
 			  EXP39 /* Heating Gas */ ///
-			) + ///
-			1/ sehg_price * ( /// 
-			  EXP40 /* Water */ ///
-			) + ///
-			1/sehe01_price * ( ///
-			 EXP41 /* Fuel Oil */ ///
 			) + ///
 			1/ setb_price * ( ///
 			 EXP55 /* Motor Vehicle Gas */ ///
@@ -40,21 +30,6 @@ gen real_gas_util = 1/sehf01_price * ( ///
 
 gen real_trans = 1/seta_price * ( ///
 			  EXP52 /* New and Used Motor Vehicles */ ///
-			) + ///
-			1/ setc_price * ( ///
-			  EXP53 /* Motor Vehicle Parts */ ///
-			) + ///
-			1/setd_price * ( ///
-			  EXP54 /* Motor Vehicle Repair */ ///
-			) + ///
-			1/sete_price * ( ///
-			  EXP57 /* Auto Insurance */ ///
-			) + ///
-			1/ setg_price * ( 
-			  EXP58 /* Mass Transit */ ///
-			) + ///
-			1/ setg01_price * (
-			 EXP60 /* Airline Fares */ ///
 			)
 
 gen real_housing = 1/seha_price * ( ///
@@ -100,4 +75,31 @@ gen real_outside_good = 1/saa_price * ( ///
 			+ EXP67 /* Primary & Secondary Education */ ///
 			+ EXP68 /* Other Education */ ///
 			+ EXP69 /* Religions Activities */ ///
+			)
+
+/*
+gas_util
+			1/ sehg_price * ( /// 
+			  EXP40 /* Water */ ///
+			) + ///
+			1/sehe01_price * ( ///
+			 EXP41 /* Fuel Oil */ ///
+			) + ///
+
+trans
+ + ///
+			1/ setc_price * ( ///
+			  EXP53 /* Motor Vehicle Parts */ ///
+			) + ///
+			1/setd_price * ( ///
+			  EXP54 /* Motor Vehicle Repair */ ///
+			) + ///
+			1/sete_price * ( ///
+			  EXP57 /* Auto Insurance */ ///
+			) + ///
+			1/ setg_price * ( 
+			  EXP58 /* Mass Transit */ ///
+			) + ///
+			1/ setg01_price * (
+			 EXP60 /* Airline Fares */ ///
 			)

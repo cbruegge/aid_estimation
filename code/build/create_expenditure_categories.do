@@ -19,17 +19,10 @@ gen food = EXP23 /* Food Off-Premise */ ///
 
 gen gas_util = EXP38 /* Electricity */ ///
 			+ EXP39 /* Heating Gas */ ///
-			+ EXP40 /* Water */ ///
-			+ EXP41 /* Fuel Oil */ ///
 			+ EXP55 /* Motor Vehicle Gas */ 
 
 
-gen trans = EXP52 /* New and Used Motor Vehicles */ ///
-			+ EXP53 /* Motor Vehicle Parts */ ///
-			+ EXP54 /* Motor Vehicle Repair */ ///
-			+ EXP57 /* Auto Insurance */ ///
-			+ EXP58 /* Mass Transit */ ///
-			+ EXP60 /* Airline Fares */ 
+gen trans = EXP52 /* New and Used Motor Vehicles */ 
 
 
 gen housing = EXP34 /* Rent -- Tenant-occupied non-farm */ ///
@@ -77,6 +70,17 @@ gen share_housing = housing / tot_expenditure
 gen share_outside_good = outside_good / tot_expenditure
 
 /*
+gas_util
+			+ EXP40 /* Water */ ///
+			+ EXP41 /* Fuel Oil */ ///
+
+trans
+///
+			+ EXP53 /* Motor Vehicle Parts */ ///
+			+ EXP54 /* Motor Vehicle Repair */ ///
+			+ EXP57 /* Auto Insurance */ ///
+			+ EXP58 /* Mass Transit */ ///
+			+ EXP60 /* Airline Fares */ 
 
 food = EXP23 + EXP24 + EXP25
 clothing = EXP29

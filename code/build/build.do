@@ -9,7 +9,6 @@
 *************************************************
 * Build CPI Data
 *************************************************
-
 local cpi_files : dir "${local_directory}/data/cpi_series" files "*.txt"
 
 * Create Temporary Stata Dataset
@@ -34,18 +33,33 @@ foreach in_file of local cpi_files {
 	}
 
 	* Define Merge Variables
-	gen urban = 1 + regexm(area_code,"D") // 1 - urban; 2 - rural 
+	capture confirm string variable area_code
 
-	gen region = .
-	replace region = 1 if area_code == "0100"
-	replace region = 2 if area_code == "0200"
-	replace region = 3 if area_code == "0300"
-	replace region = 4 if area_code == "0400"
-	replace region = 5 if regexm(area_code,"D")
+	if _rc == 0 {
+		gen urban = 1 + regexm(area_code,"D") // 1 - urban; 2 - rural 	
+
+		gen region = .
+		replace region = 1 if area_code == "0100"
+		replace region = 2 if area_code == "0200"
+		replace region = 3 if area_code == "0300"
+		replace region = 4 if area_code == "0400"
+		replace region = 5 if regexm(area_code,"D")
+
+	}
+	else {
+		tostring area_code, replace
+		gen urban = 1 // 1 - urban; 2 - rural (No Rural else area_code would be stirng) 	
+
+		gen region = .
+		replace region = 1 if area_code == "100"
+		replace region = 2 if area_code == "200"
+		replace region = 3 if area_code == "300"
+		replace region = 4 if area_code == "400"		
+	}
 
 	gen merge_var = region * 1000000 + urban * 100000 + year*10 + quarter
 
-	save "${local_directory}/data/temp/`item'.dta"
+	save "${local_directory}/data/temp/`item'.dta", replace
 
 }
 

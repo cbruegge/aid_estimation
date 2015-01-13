@@ -43,8 +43,28 @@ egen avg_share_trans = mean(share_trans)
 egen avg_share_housing = mean(share_housing)
 egen avg_share_outside_good = mean(share_outside_good)
 
+gen w_food = .1239
+gen w_trans = .1049
+gen w_housing = .2383
+gen w_outside_good = .5330
+
+gen lp_food = log(1.0911)
+gen lp_trans = log(1.1643)
+gen lp_housing = log(1.0728)
+gen lp_outside = log(1.0555)
+
+gen lp3_food = 0
+gen lp3_trans = 0
+gen lp3_housing = 0
+gen lp3_outside = 0
+
 mkmat avg_share* in 1, matrix(W)
-mkmat lp* in 1, matrix(lnP)
+mkmat lprice* in 1, matrix(lnP)
+
+mkmat w_* in 1, matrix(W2)
+mkmat lp_* in 1, matrix(lnP2)
+
+mkmat lp3_* in 1, matrix(lnP3)
 
 matrix coeffs = e(b)
 matrix vce_mat = e(V)
@@ -61,8 +81,22 @@ mata:
 	gamma = get_gamma(Beta)
 	W = st_matrix("W")
 	lnP = st_matrix("lnP")
+
+	W2 = st_matrix("W2")
+	lnP2 = st_matrix("lnP2")	
+
+	lnP3 = st_matrix("lnP3")
 	
 	calculate_eta(Beta,Sigma,W,lnP)
+	calculate_eta(Beta,Sigma,W2,lnP2)
+	calculate_eta(Beta,Sigma,W,lnP2)
+	calculate_eta(Beta,Sigma,W2,lnP)
+
+	calculate_eta(Beta,Sigma,W,lnP3)
+	calculate_eta(Beta,Sigma,W2,lnP3)
+
+end
+	
 	eta_ij_t=calculate_eta_ij_t(Beta,Sigma,W,lnP)
 	eta_ij_t
 	n_goods = (-3 + sqrt(9 + 4*(4 + 2*length(Beta))))/2

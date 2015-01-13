@@ -28,21 +28,6 @@ gen real_trans = 1/sat * ( ///
 			+ EXP60 /* Airline Fares */ ///
 			)
 
-gen real_housing = 1/sah_price * ( ///
-			  EXP34 /* Rent -- Tenant-occupied non-farm */ ///
-			+ EXP35 /* Other Rent */ ///
-			+ EXP36 /* Durable HH Equipment */ ///
-			+ EXP37 /* Non-durable HH Equipment */ ///
-			+ EXP38 /* Electricity */ ///
-			+ EXP39 /* Heating Gas */ ///
-			+ EXP40 /* Water */ ///
-			+ EXP41 /* Fuel Oil */ ///
-			+ EXP42 /* Telephone */ ///
-			+ EXP43 /* Domestic Service & Misc HH Operation */ ///
-			+ EXP75 /* Rental Equivalent of Owned Home */ ///
-			)
-
-
 gen real_outside_good = 1/saa_price * ( ///
 			  EXP29 /* Clothing and Shoes */ ///
 			+ EXP30 /* Clothing Services */ ///

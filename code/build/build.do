@@ -119,7 +119,7 @@ include "${local_directory}/code/build/create_real_expenditure_categories.do"
 include "${local_directory}/code/build/create_demographic_categories.do"
 
 * Create Weighted Price Indices
-foreach category in "food" "trans" "housing" "outside_good" {
+foreach category in "food" "trans" "outside_good" {
 	gen price_`category' = `category' / real_`category' 
 	gen lprice_`category' = log(price_`category')
 

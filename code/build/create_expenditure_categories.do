@@ -24,20 +24,6 @@ gen trans =   EXP52 /* New and Used Motor Vehicles */ ///
 			+ EXP58 /* Mass Transit */ ///
 			+ EXP60 /* Airline Fares */ 
 
-
-gen housing = EXP34 /* Rent -- Tenant-occupied non-farm */ ///
-			+ EXP35 /* Other Rent */ ///
-			+ EXP36 /* Durable HH Equipment */ ///
-			+ EXP37 /* Non-durable HH Equipment */ ///
-			+ EXP38 /* Electricity */ ///
-			+ EXP39 /* Heating Gas */ ///
-			+ EXP40 /* Water */ ///
-			+ EXP41 /* Fuel Oil */ ///
-			+ EXP42 /* Telephone */ ///
-			+ EXP43 /* Domestic Service & Misc HH Operation */ ///
-			+ EXP75 /* Rental Equivalent of Owned Home */ 
-
-
 gen outside_good = EXP29 /* Clothing and Shoes */ ///
 			+ EXP30 /* Clothing Services */ ///
 			+ EXP31 /* Jewlery and Watches */ ///
@@ -65,28 +51,9 @@ gen outside_good = EXP29 /* Clothing and Shoes */ ///
 
 
 * Create Budget Shares
-gen tot_expenditure = food + trans + housing + outside_good
+gen tot_expenditure = food + trans + outside_good
 gen lexp = log(tot_expenditure)
 gen share_food = food / tot_expenditure
 gen share_trans = trans / tot_expenditure
-gen share_housing = housing / tot_expenditure
 gen share_outside_good = outside_good / tot_expenditure
 
-/*
-
-food = EXP23 + EXP24 + EXP25
-clothing = EXP29
-rent_utilities = EXP34 + EXP38 + EXP39 + EXP40 + EXP41 + EXP42
-medical = EXP44 + EXP45 + EXP46 + EXP47 + EXP48 + EXP49
-motor_vehicle = EXP52 + EXP53 
-furniture = EXP36
-housing_interest = EXP76
-housing_tax = EXP77
-housing_goods = EXP78
-life_insurance = EXP51
-gifts_contributions = EXP69
-personal_interest = EXP71 + EXP72
-other_goods = EXP26 + EXP27 + EXP28 + EXP31 + EXP32 + EXP37 + EXP55 ///
-	+ EXP61 + EXP62 + EXP63
-other_services = EXP30 + EXP33 + EXP35 + EXP43 + EXP50 + EXP54 + EXP56 ///
-	+ EXP57 + EXP58 + EXP59 + EXP60 + EXP64
